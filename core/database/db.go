@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"go-gin-bookstore/core/abstract"
 	"go-gin-bookstore/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -13,6 +14,7 @@ import (
 type DBClient interface {
 	DBMigrate() error
 	Ready() error
+	abstract.Book
 }
 
 type Client struct {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-gin-bookstore/database"
+	"go-gin-bookstore/core/database"
 	"log"
 )
 
