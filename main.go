@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// establish connection with db
 	db, err := database.NewClient()
 	if err != nil {
 
