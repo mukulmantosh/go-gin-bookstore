@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"go-gin-bookstore/core/controllers"
 	"go-gin-bookstore/core/database"
 	"log"
 )
@@ -18,7 +18,6 @@ func main() {
 		return
 	}
 
-	router := gin.Default()
-	log.Fatal(router.Run(":8080"))
-
+	service := controllers.NewServer(db)
+	log.Fatal(service.Start())
 }
