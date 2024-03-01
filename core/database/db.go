@@ -45,8 +45,7 @@ func NewClient() (DBClient, error) {
 }
 
 func (c Client) DBMigrate() error {
-	err := c.db.AutoMigrate(&models.Book{},
-		&models.Author{})
+	err := c.db.AutoMigrate(&models.Author{}, &models.Book{})
 	if err != nil {
 		return err
 	}
