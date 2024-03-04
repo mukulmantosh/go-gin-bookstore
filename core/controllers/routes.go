@@ -7,4 +7,5 @@ func (s *Server) endpoints() {
 
 func bookRoute(s *Server) {
 	s.gin.POST("/book", s.AddBookToDB)
+	s.gin.POST("/book/upload", s.UploadBookCover)
 }
