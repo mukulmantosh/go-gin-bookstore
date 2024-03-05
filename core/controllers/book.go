@@ -11,12 +11,18 @@ import (
 )
 
 func (s *Server) AddBookToDB(c *gin.Context) {
-	var book models.Book
+	var book models.CreateBookParams
 
 	if err := c.ShouldBindJSON(&book); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-
+		return
 	}
+
+	if _, err := book.ParsePublicationDate(); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid PublicationDate"})
+		return
+	}
+
 	addBook, err := s.db.AddBook(c, &book)
 	if err != nil {
 		panic("err")
@@ -40,15 +46,16 @@ func (s *Server) UploadBookCover(c *gin.Context) {
 	// Create an uploader passing it the client
 	uploader := manager.NewUploader(s.s3)
 
-	_, err = uploader.Upload(c, &s3.PutObjectInput{
+	uploadResult, err := uploader.Upload(c, &s3.PutObjectInput{
 		Bucket: aws.String("go-bookstore"),
 		Key:    aws.String(fileHeader.Filename),
 		Body:   file,
 	})
+
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Println(uploadResult.Location)
 	c.JSON(200, gin.H{"status": true})
 
 }

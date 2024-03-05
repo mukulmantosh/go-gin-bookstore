@@ -6,5 +6,5 @@ import (
 )
 
 type Book interface {
-	AddBook(ctx context.Context, book *models.Book) (*models.Book, error)
+	AddBook(ctx context.Context, book *models.CreateBookParams) (*models.CreateBookParams, error)
 }
