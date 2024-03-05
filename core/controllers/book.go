@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func (s *Server) AddBookToDB(c *gin.Context) {
+func (s *Server) CreateBook(c *gin.Context) {
 	var book models.CreateBookParams
 
 	if err := c.ShouldBindJSON(&book); err != nil {
@@ -27,7 +27,17 @@ func (s *Server) AddBookToDB(c *gin.Context) {
 	if err != nil {
 		panic("err")
 	}
-	c.JSON(http.StatusOK, gin.H{"data": addBook})
+	c.JSON(http.StatusOK, addBook)
+}
+
+func (s *Server) ListBook(c *gin.Context) {
+	listBooks, err := s.db.ListBooks(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, listBooks)
+	return
 }
 
 func (s *Server) UploadBookCover(c *gin.Context) {

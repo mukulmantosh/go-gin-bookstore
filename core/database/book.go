@@ -27,3 +27,9 @@ func (c Client) AddBook(ctx context.Context, bookParams *models.CreateBookParams
 	}
 	return bookParams, nil
 }
+
+func (c Client) ListBooks(ctx context.Context) ([]models.Book, error) {
+	var books []models.Book
+	result := c.db.WithContext(ctx).Find(&books)
+	return books, result.Error
+}
