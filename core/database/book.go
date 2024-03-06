@@ -53,3 +53,15 @@ func (c Client) UpdateBook(ctx context.Context, updateBookParams models.DatePars
 	}
 	return true, nil
 }
+
+func (c Client) DeleteBook(ctx context.Context, bookId int64) error {
+	var bookInfo = models.Book{Id: bookId}
+	if err := c.db.First(&bookInfo).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("there is no book associated with this ID")
+		}
+	}
+	// Delete Book (Hard delete)
+	c.db.Unscoped().Delete(&bookInfo)
+	return nil
+}

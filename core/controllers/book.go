@@ -46,7 +46,7 @@ func (s *Server) UpdateBook(c *gin.Context) {
 	bookId := c.Param("id")
 	parseBookId, err := strconv.ParseInt(bookId, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "userID is invalid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bookId is invalid"})
 		return
 	}
 
@@ -70,6 +70,24 @@ func (s *Server) UpdateBook(c *gin.Context) {
 		return
 	}
 	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Something went wrong."})
+	return
+}
+
+func (s *Server) DeleteBook(c *gin.Context) {
+	bookId := c.Param("id")
+	parseBookId, err := strconv.ParseInt(bookId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bookId is invalid"})
+		return
+	}
+
+	if err = s.db.DeleteBook(c, parseBookId); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "message": "book deleted"})
 	return
 }
 
