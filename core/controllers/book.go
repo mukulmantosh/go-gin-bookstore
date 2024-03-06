@@ -119,6 +119,7 @@ func (s *Server) UploadBookCover(c *gin.Context) {
 		Bucket: aws.String(os.Getenv("S3_BUCKET")),
 		Key:    aws.String(fileHeader.Filename),
 		Body:   file,
+		//ACL:    "public-read",
 	})
 
 	if err != nil {
