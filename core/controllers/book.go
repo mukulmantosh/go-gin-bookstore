@@ -8,10 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-gin-bookstore/models"
 	"net/http"
+	"strconv"
 )
 
 func (s *Server) CreateBook(c *gin.Context) {
-	var book models.CreateBookParams
+	var book models.BookParams
 
 	if err := c.ShouldBindJSON(&book); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -37,6 +38,38 @@ func (s *Server) ListBook(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, listBooks)
+	return
+}
+
+func (s *Server) UpdateBook(c *gin.Context) {
+	var book models.UpdateBookParams
+	bookId := c.Param("id")
+	parseBookId, err := strconv.ParseInt(bookId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "userID is invalid"})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&book); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Check the data you are passing."})
+		return
+	}
+
+	if _, err := book.ParsePublicationDate(); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid PublicationDate"})
+		return
+	}
+
+	updateBook, err := s.db.UpdateBook(c, book, parseBookId)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if updateBook == true {
+		c.JSON(http.StatusOK, gin.H{"status": true, "message": "Book Updated!"})
+		return
+	}
+	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Something went wrong."})
 	return
 }
 

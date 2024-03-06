@@ -6,6 +6,7 @@ import (
 )
 
 type Book interface {
-	AddBook(ctx context.Context, book *models.CreateBookParams) (*models.CreateBookParams, error)
+	AddBook(ctx context.Context, bookParams models.DateParser) (*models.BookParams, error)
 	ListBooks(ctx context.Context) ([]models.Book, error)
+	UpdateBook(ctx context.Context, updateBookParams models.DateParser, userId int64) (bool, error)
 }
