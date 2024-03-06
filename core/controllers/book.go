@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-gin-bookstore/models"
 	"net/http"
+	"os"
 	"strconv"
 )
 
@@ -92,6 +93,13 @@ func (s *Server) DeleteBook(c *gin.Context) {
 }
 
 func (s *Server) UploadBookCover(c *gin.Context) {
+	bookId := c.Param("id")
+	parseBookId, err := strconv.ParseInt(bookId, 10, 64)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "bookId is invalid"})
+		return
+	}
+
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("Error while getting file: %s", err.Error()))
@@ -100,7 +108,7 @@ func (s *Server) UploadBookCover(c *gin.Context) {
 
 	file, err := fileHeader.Open()
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("Error opening file: %s", err.Error()))
+		c.AbortWithStatusJSON(http.StatusBadRequest, fmt.Sprintf("Error opening file: %s", err.Error()))
 		return
 	}
 	defer file.Close()
@@ -108,15 +116,22 @@ func (s *Server) UploadBookCover(c *gin.Context) {
 	uploader := manager.NewUploader(s.s3)
 
 	uploadResult, err := uploader.Upload(c, &s3.PutObjectInput{
-		Bucket: aws.String("go-bookstore"),
+		Bucket: aws.String(os.Getenv("S3_BUCKET")),
 		Key:    aws.String(fileHeader.Filename),
 		Body:   file,
 	})
 
 	if err != nil {
-		panic(err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
-	fmt.Println(uploadResult.Location)
-	c.JSON(200, gin.H{"status": true})
 
+	//Update URL in DB
+	_, err = s.db.UpdateBookCover(c, parseBookId, uploadResult.Location)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong."})
+	}
+
+	c.JSON(200, gin.H{"status": true, "message": "Image Updated Successfully!"})
+	return
 }

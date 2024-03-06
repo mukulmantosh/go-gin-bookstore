@@ -65,3 +65,16 @@ func (c Client) DeleteBook(ctx context.Context, bookId int64) error {
 	c.db.Unscoped().Delete(&bookInfo)
 	return nil
 }
+
+func (c Client) UpdateBookCover(ctx context.Context, bookId int64, bookImageURL string) (bool, error) {
+	var bookInfo = models.Book{Id: bookId}
+	if err := c.db.First(&bookInfo).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, errors.New("there is no book associated with this ID")
+		}
+	}
+	//Update ImageURL
+	c.db.Save(&models.Book{Id: bookId, Image: bookImageURL})
+	return true, nil
+
+}

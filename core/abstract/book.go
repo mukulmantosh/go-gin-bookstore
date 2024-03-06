@@ -10,4 +10,5 @@ type Book interface {
 	ListBooks(ctx context.Context) ([]models.Book, error)
 	UpdateBook(ctx context.Context, updateBookParams models.DateParser, bookId int64) (bool, error)
 	DeleteBook(ctx context.Context, bookId int64) error
+	UpdateBookCover(ctx context.Context, bookId int64, bookImageURL string) (bool, error)
 }
