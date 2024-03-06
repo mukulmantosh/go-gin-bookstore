@@ -39,7 +39,6 @@ func (s *Server) ListBook(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, listBooks)
-	return
 }
 
 func (s *Server) UpdateBook(c *gin.Context) {
@@ -66,12 +65,11 @@ func (s *Server) UpdateBook(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if updateBook == true {
+	if updateBook {
 		c.JSON(http.StatusOK, gin.H{"status": true, "message": "Book Updated!"})
 		return
 	}
 	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Something went wrong."})
-	return
 }
 
 func (s *Server) DeleteBook(c *gin.Context) {
@@ -89,7 +87,6 @@ func (s *Server) DeleteBook(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "book deleted"})
-	return
 }
 
 func (s *Server) UploadBookCover(c *gin.Context) {
@@ -134,5 +131,4 @@ func (s *Server) UploadBookCover(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"status": true, "message": "Image Updated Successfully!"})
-	return
 }

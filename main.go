@@ -12,7 +12,7 @@ func main() {
 	// establish connection with db
 	db, err := database.NewClient()
 	if err != nil {
-
+		panic("Something wrong with DBClient")
 	}
 	err = db.DBMigrate()
 	if err != nil {
