@@ -15,6 +15,7 @@ type DBClient interface {
 	DBMigrate() error
 	Ready() error
 	abstract.Book
+	abstract.Author
 }
 
 type Client struct {
