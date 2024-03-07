@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-gin-bookstore/models"
 	"net/http"
@@ -16,6 +17,7 @@ func (s *Server) CreateAuthor(c *gin.Context) {
 
 	addAuthor, err := s.db.AddAuthor(c, author)
 	if err != nil {
+		fmt.Println("errr", err)
 		panic("err")
 	}
 	c.JSON(http.StatusOK, addAuthor)

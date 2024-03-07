@@ -27,6 +27,7 @@ func (s *Server) CreateBook(c *gin.Context) {
 
 	addBook, err := s.db.AddBook(c, &book)
 	if err != nil {
+		fmt.Println("err", err.Error())
 		panic("err")
 	}
 	c.JSON(http.StatusOK, addBook)

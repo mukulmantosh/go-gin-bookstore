@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"fmt"
 	"go-gin-bookstore/models"
 	"gorm.io/gorm"
 	"log/slog"
@@ -15,7 +16,7 @@ func (c Client) AddBook(ctx context.Context, bookParams models.DateParser) (*mod
 	}
 	var Book models.Book
 	switch params := bookParams.(type) {
-	case models.BookParams:
+	case *models.BookParams:
 		Book.ID = uint(maxID) + 1
 		Book.Title = params.Title
 		Book.ISBN = params.ISBN
@@ -27,10 +28,12 @@ func (c Client) AddBook(ctx context.Context, bookParams models.DateParser) (*mod
 			slog.Error(result.Error.Error())
 			return nil, errors.New("unable to register book")
 		}
-		return &params, nil
-	}
-	return nil, errors.New("unsupported Type")
+		return params, nil
+	default:
+		fmt.Printf("Type of bookParams: %T\n", bookParams)
+		return nil, errors.New("unsupported Type")
 
+	}
 }
 
 func (c Client) ListBooks(ctx context.Context) ([]models.Book, error) {
