@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-gin-bookstore/models"
 	"net/http"
@@ -17,7 +16,6 @@ func (s *Server) CreateAuthor(c *gin.Context) {
 
 	addAuthor, err := s.db.AddAuthor(c, author)
 	if err != nil {
-		fmt.Println("errr", err)
 		panic("err")
 	}
 	c.JSON(http.StatusOK, addAuthor)
@@ -43,4 +41,13 @@ func (s *Server) LinkBook(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Something went wrong."})
 	}
 
+}
+
+func (s *Server) ListAuthors(c *gin.Context) {
+	listAuthors, err := s.db.ListAuthors(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, listAuthors)
 }

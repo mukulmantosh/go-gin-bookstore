@@ -32,3 +32,13 @@ func (c Client) LinkAuthorBook(_ context.Context, params models.AuthorBook) (boo
 	}
 	return true, nil
 }
+
+func (c Client) ListAuthors(_ context.Context) ([]models.Author, error) {
+	var authors []models.Author
+	result := c.db.Preload("Books").Find(&authors)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return authors, nil
+}

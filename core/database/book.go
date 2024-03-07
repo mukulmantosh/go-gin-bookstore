@@ -77,7 +77,7 @@ func (c Client) UpdateBookCover(_ context.Context, bookId int64, bookImageURL st
 		}
 	}
 	//Update ImageURL
-	c.db.Save(&models.Book{Id: bookId, Image: bookImageURL})
+	c.db.Model(&bookInfo).Updates(models.Book{Image: bookImageURL})
 	return true, nil
 
 }
