@@ -16,4 +16,5 @@ func bookRoute(s *Server) {
 
 func authorRoute(s *Server) {
 	s.gin.POST("/author", s.CreateAuthor)
+	s.gin.POST("/author/book/link", s.LinkBook)
 }

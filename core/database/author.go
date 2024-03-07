@@ -22,3 +22,13 @@ func (c Client) AddAuthor(ctx context.Context, author models.Author) (*models.Au
 	}
 	return &AuthorModel, nil
 }
+
+func (c Client) LinkAuthorBook(_ context.Context, params models.AuthorBook) (bool, error) {
+	author := models.Author{Id: params.AuthorID}
+	book := models.Book{Id: params.BookID}
+	err := c.db.Model(&author).Association("Books").Append(&book)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
