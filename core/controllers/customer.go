@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-gin-bookstore/models"
+	"log/slog"
 	"net/http"
 )
 
@@ -15,15 +15,10 @@ func (s *Server) CreateCustomer(c *gin.Context) {
 		return
 	}
 
-	//if _, err := book.ParsePublicationDate(); err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid PublicationDate"})
-	//	return
-	//}
-
-	addBook, err := s.db.AddCustomer(c, customer)
+	addCustomer, err := s.db.AddCustomer(c, customer)
 	if err != nil {
-		fmt.Println("err", err.Error())
-		panic("err")
+		slog.Error(err.Error())
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 	}
-	c.JSON(http.StatusOK, addBook)
+	c.JSON(http.StatusOK, addCustomer)
 }

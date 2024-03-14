@@ -8,7 +8,7 @@ import (
 
 func (c Client) AddCustomer(ctx context.Context, cusParams models.Customer) (*models.Customer, error) {
 	var maxID int64
-	if result := c.db.Model(&models.Book{}).Select("COALESCE(MAX(id), 0)").Scan(&maxID); result.Error != nil {
+	if result := c.db.Model(&models.Customer{}).Select("COALESCE(MAX(id), 0)").Scan(&maxID); result.Error != nil {
 		return nil, errors.New("something went wrong")
 	}
 	var Customer models.Customer
