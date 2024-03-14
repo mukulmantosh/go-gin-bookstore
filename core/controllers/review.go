@@ -31,5 +31,4 @@ func (s *Server) CreateReview(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, map[string]string{"message": "Review successfully added."})
-	return
 }
