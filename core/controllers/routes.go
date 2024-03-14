@@ -4,6 +4,7 @@ func (s *Server) endpoints() {
 	bookRoute(s)
 	authorRoute(s)
 	customerRoute(s)
+	reviewRoute(s)
 
 }
 
@@ -23,4 +24,8 @@ func authorRoute(s *Server) {
 
 func customerRoute(s *Server) {
 	s.gin.POST("/customer", s.CreateCustomer)
+}
+
+func reviewRoute(s *Server) {
+	s.gin.POST("/review", s.CreateReview)
 }

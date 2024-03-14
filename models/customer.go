@@ -21,3 +21,10 @@ type Review struct {
 	Customer   Customer `gorm:"foreignKey:CustomerID"`
 	Book       Book     `gorm:"foreignKey:BookID"`
 }
+
+type ReviewParams struct {
+	CustomerID int64  `json:"customer_id" binding:"required"`
+	BookID     int64  `json:"book_id" binding:"required"`
+	Rating     int    `json:"rating" binding:"required"`
+	Comment    string `json:"comment,omitempty" binding:"required"`
+}

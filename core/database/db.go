@@ -17,6 +17,7 @@ type DBClient interface {
 	abstract.Book
 	abstract.Author
 	abstract.Customer
+	abstract.Review
 }
 
 type Client struct {
