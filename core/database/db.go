@@ -16,6 +16,7 @@ type DBClient interface {
 	Ready() error
 	abstract.Book
 	abstract.Author
+	abstract.Customer
 }
 
 type Client struct {
@@ -46,7 +47,11 @@ func NewClient() (DBClient, error) {
 }
 
 func (c Client) DBMigrate() error {
-	err := c.db.AutoMigrate(&models.Author{}, &models.Book{})
+	err := c.db.AutoMigrate(&models.Author{},
+		&models.Book{},
+		&models.Customer{},
+		&models.Review{},
+	)
 	if err != nil {
 		return err
 	}

@@ -3,6 +3,7 @@ package controllers
 func (s *Server) endpoints() {
 	bookRoute(s)
 	authorRoute(s)
+	customerRoute(s)
 
 }
 
@@ -18,4 +19,8 @@ func authorRoute(s *Server) {
 	s.gin.GET("/authors", s.ListAuthors)
 	s.gin.POST("/author", s.CreateAuthor)
 	s.gin.POST("/author/book/link", s.LinkBook)
+}
+
+func customerRoute(s *Server) {
+	s.gin.POST("/customer", s.CreateCustomer)
 }
