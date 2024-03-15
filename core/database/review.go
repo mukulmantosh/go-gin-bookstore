@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"errors"
-	"fmt"
 	"go-gin-bookstore/core"
 	"go-gin-bookstore/models"
 	"gorm.io/gorm"
@@ -36,7 +35,6 @@ func (c Client) AddReview(ctx context.Context, revParams models.ReviewParams) (b
 		}
 	}
 
-	fmt.Println("book", book.Id)
 	var Review models.Review
 	Review.ID = uint(maxID + 1)
 	Review.Rating = revParams.Rating

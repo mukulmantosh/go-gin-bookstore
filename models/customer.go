@@ -25,6 +25,6 @@ type Review struct {
 type ReviewParams struct {
 	CustomerID int64  `json:"customer_id" binding:"required"`
 	BookID     int64  `json:"book_id" binding:"required"`
-	Rating     int    `json:"rating" binding:"required"`
+	Rating     int    `json:"rating" binding:"required" validate:"min=1,max=5"`
 	Comment    string `json:"comment,omitempty" binding:"required"`
 }
