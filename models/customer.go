@@ -28,3 +28,8 @@ type ReviewParams struct {
 	Rating     int    `json:"rating" binding:"required" validate:"min=1,max=5"`
 	Comment    string `json:"comment,omitempty" binding:"required"`
 }
+
+type ReviewInfo struct {
+	Rating  int    `json:"rating" binding:"required"`
+	Comment string `json:"comment,omitempty"`
+}

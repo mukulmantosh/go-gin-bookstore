@@ -7,6 +7,7 @@ import (
 	"go-gin-bookstore/core"
 	"go-gin-bookstore/models"
 	"net/http"
+	"strconv"
 )
 
 func (s *Server) CreateReview(c *gin.Context) {
@@ -52,4 +53,21 @@ func (s *Server) CreateReview(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, map[string]string{"message": "Review successfully added."})
+}
+
+func (s *Server) ListReviewByBook(c *gin.Context) {
+	bookId := c.Param("id")
+	parseBookId, err := strconv.ParseInt(bookId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bookId is invalid"})
+		return
+	}
+
+	bookReviews, err := s.db.ListReview(c, parseBookId)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
+	}
+	c.JSON(http.StatusOK, bookReviews)
+	return
+
 }

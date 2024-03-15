@@ -28,4 +28,6 @@ func customerRoute(s *Server) {
 
 func reviewRoute(s *Server) {
 	s.gin.POST("/review", s.CreateReview)
+	s.gin.GET("/review/book/:id", s.ListReviewByBook)
+
 }

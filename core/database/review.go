@@ -46,3 +46,9 @@ func (c Client) AddReview(ctx context.Context, revParams models.ReviewParams) (b
 	return true, nil
 
 }
+
+func (c Client) ListReview(ctx context.Context, bookId int64) ([]models.ReviewInfo, error) {
+	var reviews []models.ReviewInfo
+	c.db.WithContext(ctx).Where(&models.Review{BookID: bookId}).Select("rating", "comment").Find(&reviews)
+	return reviews, nil
+}
