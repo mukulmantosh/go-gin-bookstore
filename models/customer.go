@@ -30,7 +30,7 @@ type ReviewParams struct {
 }
 
 type ReviewList struct {
-	Id      int64  `json:"id" `
+	Id      int64  `json:"id"`
 	Rating  int    `json:"rating"`
 	Comment string `json:"comment"`
 }
