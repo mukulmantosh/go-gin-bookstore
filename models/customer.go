@@ -18,8 +18,8 @@ type Review struct {
 	BookID     int64    `json:"book_id" binding:"required"`
 	Rating     int      `json:"rating" binding:"required"`
 	Comment    string   `json:"comment,omitempty"`
-	Customer   Customer `gorm:"foreignKey:CustomerID"`
-	Book       Book     `gorm:"foreignKey:BookID"`
+	Customer   Customer `gorm:"foreignKey:CustomerID" json:"-"`
+	Book       Book     `gorm:"foreignKey:BookID" json:"-"`
 }
 
 type ReviewParams struct {
@@ -29,7 +29,8 @@ type ReviewParams struct {
 	Comment    string `json:"comment,omitempty" binding:"required"`
 }
 
-type ReviewInfo struct {
-	Rating  int    `json:"rating" binding:"required"`
-	Comment string `json:"comment,omitempty"`
+type ReviewList struct {
+	Id      int64  `json:"id" `
+	Rating  int    `json:"rating"`
+	Comment string `json:"comment"`
 }

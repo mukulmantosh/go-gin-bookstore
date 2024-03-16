@@ -7,5 +7,5 @@ import (
 
 type Review interface {
 	AddReview(ctx context.Context, revParams models.ReviewParams) (bool, error)
-	ListReview(ctx context.Context, bookId int64) ([]models.ReviewInfo, error)
+	ListReview(ctx context.Context, bookId int64) ([]models.ReviewList, error)
 }
