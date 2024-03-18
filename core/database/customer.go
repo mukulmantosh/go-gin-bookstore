@@ -24,7 +24,7 @@ func (c Client) AddCustomer(ctx context.Context, cusParams models.Customer) (*mo
 	return &Customer, nil
 }
 
-func (c Client) DeleteCustomer(ctx context.Context, customerId int64) error {
+func (c Client) DeleteCustomer(_ context.Context, customerId int64) error {
 	var CustomerInfo = models.Customer{Id: customerId}
 
 	if err := c.db.First(&CustomerInfo).Error; err != nil {
@@ -34,4 +34,18 @@ func (c Client) DeleteCustomer(ctx context.Context, customerId int64) error {
 	}
 	c.db.Delete(&CustomerInfo)
 	return nil
+}
+
+func (c Client) UpdateCustomer(_ context.Context, updateCusParams models.CustomerParams, customerId int64) (bool, error) {
+	var cusInfo = models.Customer{Id: customerId}
+	if err := c.db.First(&cusInfo).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, errors.New("there is no customer associated with this ID")
+		}
+	}
+	c.db.Model(&cusInfo).Updates(models.Customer{
+		FirstName: updateCusParams.FirstName,
+		LastName:  updateCusParams.LastName,
+		Address:   updateCusParams.Address})
+	return true, nil
 }

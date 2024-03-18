@@ -24,6 +24,32 @@ func (s *Server) CreateCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, addCustomer)
 }
 
+func (s *Server) UpdateCustomer(c *gin.Context) {
+	var customer models.CustomerParams
+	customerId := c.Param("id")
+	parseCustomerId, err := strconv.ParseInt(customerId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "customerId is invalid"})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&customer); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Check the data you are passing."})
+		return
+	}
+
+	updateCustomer, err := s.db.UpdateCustomer(c, customer, parseCustomerId)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if updateCustomer {
+		c.JSON(http.StatusOK, gin.H{"status": true, "message": "Customer Information Updated!"})
+		return
+	}
+	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": false, "message": "Something went wrong."})
+}
+
 func (s *Server) DeleteCustomer(c *gin.Context) {
 	customerId := c.Param("id")
 	parseCustomerId, err := strconv.ParseInt(customerId, 10, 64)

@@ -29,6 +29,12 @@ type ReviewParams struct {
 	Comment    string `json:"comment,omitempty" binding:"required"`
 }
 
+type CustomerParams struct {
+	FirstName string `json:"first_name" binding:"required"`
+	LastName  string `json:"last_name" binding:"required"`
+	Address   string `json:"address" binding:"required"`
+}
+
 type ReviewList struct {
 	Id      int64  `json:"id"`
 	Rating  int    `json:"rating"`
