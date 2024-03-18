@@ -24,6 +24,8 @@ func authorRoute(s *Server) {
 
 func customerRoute(s *Server) {
 	s.gin.POST("/customer", s.CreateCustomer)
+	s.gin.DELETE("/customer/:id", s.DeleteCustomer)
+
 }
 
 func reviewRoute(s *Server) {
