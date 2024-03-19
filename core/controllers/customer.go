@@ -39,10 +39,9 @@ func bindCustomerData(c *gin.Context, customer interface{}) bool {
 func (s *Server) CreateCustomer(c *gin.Context) {
 	customer := models.Customer{}
 
-	if _, ok := getAndValidateCustomer(c, &customer); !ok {
+	if !bindCustomerData(c, &customer) {
 		return
 	}
-
 	addCustomer, err := s.db.AddCustomer(c, customer)
 	if err != nil {
 		slog.Error(err.Error())
@@ -71,7 +70,7 @@ func (s *Server) UpdateCustomer(c *gin.Context) {
 }
 
 func (s *Server) DeleteCustomer(c *gin.Context) {
-	customerID, ok := getAndValidateCustomer(c, &models.CustomerParams{})
+	customerID, ok := parseCustomerId(c)
 	if !ok {
 		return
 	}
