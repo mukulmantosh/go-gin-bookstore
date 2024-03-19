@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (c Client) AddCustomer(ctx context.Context, cusParams models.Customer) (*models.Customer, error) {
+func (c Client) AddCustomer(_ context.Context, cusParams models.Customer) (*models.Customer, error) {
 	var maxID int64
 	if result := c.db.Model(&models.Customer{}).Select("COALESCE(MAX(id), 0)").Scan(&maxID); result.Error != nil {
 		return nil, errors.New("something went wrong")

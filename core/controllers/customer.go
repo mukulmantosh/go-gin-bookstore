@@ -8,11 +8,38 @@ import (
 	"strconv"
 )
 
-func (s *Server) CreateCustomer(c *gin.Context) {
-	var customer models.Customer
+func getAndValidateCustomer(c *gin.Context, customer interface{}) (int64, bool) {
+	customerID, ok := parseCustomerId(c)
+	if !ok {
+		return 0, false
+	}
+	if !bindCustomerData(c, customer) {
+		return 0, false
+	}
+	return customerID, true
+}
 
-	if err := c.ShouldBindJSON(&customer); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func parseCustomerId(c *gin.Context) (int64, bool) {
+	customerId := c.Param("id")
+	parseCusId, err := strconv.ParseInt(customerId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "customerId is invalid"})
+	}
+	return parseCusId, err == nil
+}
+
+func bindCustomerData(c *gin.Context, customer interface{}) bool {
+	if err := c.ShouldBindJSON(customer); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Check the data you are passing."})
+		return false
+	}
+	return true
+}
+
+func (s *Server) CreateCustomer(c *gin.Context) {
+	customer := models.Customer{}
+
+	if _, ok := getAndValidateCustomer(c, &customer); !ok {
 		return
 	}
 
@@ -25,20 +52,13 @@ func (s *Server) CreateCustomer(c *gin.Context) {
 }
 
 func (s *Server) UpdateCustomer(c *gin.Context) {
-	var customer models.CustomerParams
-	customerId := c.Param("id")
-	parseCustomerId, err := strconv.ParseInt(customerId, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "customerId is invalid"})
+	customer := models.CustomerParams{}
+	customerID, ok := getAndValidateCustomer(c, &customer)
+	if !ok {
 		return
 	}
 
-	if err := c.ShouldBindJSON(&customer); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Check the data you are passing."})
-		return
-	}
-
-	updateCustomer, err := s.db.UpdateCustomer(c, customer, parseCustomerId)
+	updateCustomer, err := s.db.UpdateCustomer(c, customer, customerID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -51,14 +71,12 @@ func (s *Server) UpdateCustomer(c *gin.Context) {
 }
 
 func (s *Server) DeleteCustomer(c *gin.Context) {
-	customerId := c.Param("id")
-	parseCustomerId, err := strconv.ParseInt(customerId, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "customerId is invalid"})
+	customerID, ok := getAndValidateCustomer(c, &models.CustomerParams{})
+	if !ok {
 		return
 	}
 
-	if err = s.db.DeleteCustomer(c, parseCustomerId); err != nil {
+	if err := s.db.DeleteCustomer(c, customerID); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 
