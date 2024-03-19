@@ -68,6 +68,4 @@ func (s *Server) ListReviewByBook(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong"})
 	}
 	c.JSON(http.StatusOK, bookReviews)
-	return
-
 }
