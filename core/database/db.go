@@ -13,7 +13,6 @@ import (
 
 type DBClient interface {
 	DBMigrate() error
-	Ready() error
 	abstract.Book
 	abstract.Author
 	abstract.Customer
@@ -58,11 +57,6 @@ func (c Client) DBMigrate() error {
 	}
 	return nil
 
-}
-
-func (c Client) Ready() error {
-	//TODO implement me
-	panic("implement me")
 }
 
 func (c Client) CloseDBConnection() {
