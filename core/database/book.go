@@ -43,7 +43,7 @@ func (c Client) ListBooks(ctx context.Context) ([]models.Book, error) {
 }
 
 func (c Client) UpdateBook(_ context.Context, updateBookParams models.DateParser, bookId int64) (bool, error) {
-	var bookInfo = models.Book{Id: bookId}
+	var bookInfo = models.Book{Model: gorm.Model{ID: uint(bookId)}}
 	if err := c.db.First(&bookInfo).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, errors.New("there is no book associated with this ID")
@@ -52,13 +52,13 @@ func (c Client) UpdateBook(_ context.Context, updateBookParams models.DateParser
 	switch params := updateBookParams.(type) {
 	case models.UpdateBookParams:
 		parsedDate, _ := params.ParsePublicationDate()
-		c.db.Save(&models.Book{Id: bookId, Title: params.Title, ISBN: params.ISBN, PublicationDate: parsedDate})
+		c.db.Save(&models.Book{Model: gorm.Model{ID: uint(bookId)}, Title: params.Title, ISBN: params.ISBN, PublicationDate: parsedDate})
 	}
 	return true, nil
 }
 
 func (c Client) DeleteBook(_ context.Context, bookId int64) error {
-	var bookInfo = models.Book{Id: bookId}
+	var bookInfo = models.Book{Model: gorm.Model{ID: uint(bookId)}}
 	if err := c.db.First(&bookInfo).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("there is no book associated with this ID")
@@ -70,7 +70,7 @@ func (c Client) DeleteBook(_ context.Context, bookId int64) error {
 }
 
 func (c Client) UpdateBookCover(_ context.Context, bookId int64, bookImageURL string) (bool, error) {
-	var bookInfo = models.Book{Id: bookId}
+	var bookInfo = models.Book{Model: gorm.Model{ID: uint(bookId)}}
 	if err := c.db.First(&bookInfo).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, errors.New("there is no book associated with this ID")

@@ -8,12 +8,7 @@ import (
 )
 
 func (c Client) AddCustomer(_ context.Context, cusParams models.Customer) (*models.Customer, error) {
-	var maxID int64
-	if result := c.db.Model(&models.Customer{}).Select("COALESCE(MAX(id), 0)").Scan(&maxID); result.Error != nil {
-		return nil, errors.New("something went wrong")
-	}
 	var Customer models.Customer
-	Customer.Id = maxID + 1
 	Customer.FirstName = cusParams.FirstName
 	Customer.LastName = cusParams.LastName
 	Customer.Email = cusParams.Email
@@ -25,7 +20,7 @@ func (c Client) AddCustomer(_ context.Context, cusParams models.Customer) (*mode
 }
 
 func (c Client) DeleteCustomer(_ context.Context, customerId int64) error {
-	var CustomerInfo = models.Customer{Id: customerId}
+	var CustomerInfo = models.Customer{Model: gorm.Model{ID: uint(customerId)}}
 
 	if err := c.db.First(&CustomerInfo).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -37,7 +32,7 @@ func (c Client) DeleteCustomer(_ context.Context, customerId int64) error {
 }
 
 func (c Client) UpdateCustomer(_ context.Context, updateCusParams models.CustomerParams, customerId int64) (bool, error) {
-	var cusInfo = models.Customer{Id: customerId}
+	var cusInfo = models.Customer{Model: gorm.Model{ID: uint(customerId)}}
 	if err := c.db.First(&cusInfo).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, errors.New("there is no customer associated with this ID")

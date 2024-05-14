@@ -4,7 +4,6 @@ import "gorm.io/gorm"
 
 type Author struct {
 	gorm.Model
-	Id    int64  `json:"ID" gorm:"primaryKey"`
 	Name  string `json:"name" binding:"required"`
 	Books []Book `gorm:"many2many:author_books;"`
 }

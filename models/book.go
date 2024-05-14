@@ -12,7 +12,6 @@ type DateParser interface {
 
 type Book struct {
 	gorm.Model
-	Id              int64     `json:"ID" gorm:"primaryKey"`
 	Title           string    `json:"title" binding:"required"`
 	ISBN            string    `json:"isbn" binding:"required"`
 	Image           string    `json:"image,omitempty"`
