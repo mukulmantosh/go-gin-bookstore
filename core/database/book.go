@@ -10,24 +10,21 @@ import (
 )
 
 func (c Client) AddBook(ctx context.Context, bookParams models.DateParser) (*models.BookParams, error) {
-	var maxID int
-	if result := c.db.Model(&models.Book{}).Select("COALESCE(MAX(id), 0)").Scan(&maxID); result.Error != nil {
-		return nil, errors.New("something went wrong")
-	}
 	var Book models.Book
 	switch params := bookParams.(type) {
 	case *models.BookParams:
-		Book.ID = uint(maxID) + 1
 		Book.Title = params.Title
 		Book.ISBN = params.ISBN
 		Book.PublicationDate, _ = bookParams.ParsePublicationDate()
 
-		params.Id = int64(Book.ID)
 		result := c.db.WithContext(ctx).Create(&Book)
+
 		if result.Error != nil {
 			slog.Error(result.Error.Error())
 			return nil, errors.New("unable to register book")
 		}
+		params.Id = int64(Book.ID)
+
 		return params, nil
 	default:
 		fmt.Printf("Type of bookParams: %T\n", bookParams)
