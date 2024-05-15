@@ -54,9 +54,5 @@ We will access AWS resources such as Amazon S3. Therefore, ensure you configure 
 go run main.go
 ```
 
-## REST Examples
 
-You can find the Postman Collection for GoLand under `postman_httpclient` directory.
-
-![postman-app](misc/images/postman.png)
 
