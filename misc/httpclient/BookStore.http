@@ -1,0 +1,123 @@
+# BookStore
+
+###
+@URL = http://localhost:8080
+# group: Book
+# @name Add a new Book
+POST {{URL}}/book
+Content-Type: application/json
+
+{
+  "title": "The Time Traveler's Handbook: A Beginner's Guide to Temporal Adventures",
+  "isbn": "978-1-234567-89-0",
+  "publication_date": "2024-03-11"
+}
+
+###
+# group: Book
+# @name Get list of all books
+GET {{URL}}/book
+
+###
+# group: Book
+# @name Update Book By ID
+PUT {{URL}}/book/2
+Content-Type: application/json
+
+{
+  "title": "Sample Title",
+  "isbn": "123456",
+  "publication_date": "2020-01-01"
+}
+
+###
+# group: Book
+# @name Delete Book By ID
+DELETE {{URL}}/book/2
+
+###
+# group: Book
+# @name Upload Book Cover by Book ID
+POST {{URL}}/book/cover/1
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="book_front_cover.png"
+
+< /Users/mukulmantosh/Desktop/book_front_cover.png
+--WebAppBoundary
+
+###
+# group: Customer
+# @name Add a new Customer
+POST {{URL}}/customer
+Content-Type: application/json
+
+{
+  "first_name": "Emily",
+  "last_name": "Johnson",
+  "email": "emily.johnson@example.com",
+  "phone_number": "1234567890",
+  "address": "123 Main Street, Anytown, USA"
+}
+
+###
+# group: Customer
+# @name Delete Customer
+DELETE {{URL}}/customer/1
+
+###
+# group: Customer
+# @name Update Customer
+PUT {{URL}}/customer/1
+Content-Type: application/json
+
+{
+  "first_name": "Tom",
+  "last_name": "Cruise",
+  "address": "Hollywood, USA"
+}
+
+###
+# group: Review
+# @name Add a new Review
+POST {{URL}}/review
+Content-Type: application/json
+
+{
+  "customer_id": 1,
+  "book_id": 1,
+  "rating": 5,
+  "comment": "This is something really nice!"
+}
+
+###
+# group: Review
+# @name List Reviews by Book ID
+GET {{URL}}/review/book/1
+
+###
+# group: Author
+# @name Add New Author
+POST {{URL}}/author
+Content-Type: application/json
+
+{
+  "name": "Ronaldo"
+}
+
+###
+# group: Author
+# @name Link Author & Book
+POST {{URL}}/author/book/link
+Content-Type: application/json
+
+{
+  "author_id": 1,
+  "book_id": 1
+}
+
+###
+# group: Author
+# @name Get All Authors
+GET {{URL}}/authors

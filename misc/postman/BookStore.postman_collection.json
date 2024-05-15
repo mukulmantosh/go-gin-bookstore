@@ -96,6 +96,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Upload Book Cover by Book ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/mukulmantosh/Desktop/book_front_cover.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/book/cover/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"book",
+								"cover",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -205,7 +234,7 @@
 					"response": []
 				},
 				{
-					"name": "List Reviews by Book",
+					"name": "List Reviews by Book ID",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -218,6 +247,82 @@
 								"review",
 								"book",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "Add New Author",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"name\": \"Ronaldo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/author",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"author"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Link Author & Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"author_id\": 1,\n    \"book_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/author/book/link",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"author",
+								"book",
+								"link"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Authors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/authors",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"authors"
 							]
 						}
 					},
