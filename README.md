@@ -54,5 +54,7 @@ We will access AWS resources such as Amazon S3. Therefore, ensure you configure 
 go run main.go
 ```
 
+### Blog
 
+Want to follow step by step, follow this tutorial: [REST API Development with Gin](https://www.jetbrains.com/guide/go/tutorials/bookstore_rest_api/)
 
